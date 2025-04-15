@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karish To-Do List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #ffd700;
+    }
+
+    h1 {
+      position: sticky;
+      top: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      color: #ffd700;
+      text-shadow: 1px 1px 5px #fff;
+      z-index: 10;
+    }
+
+    .quote {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ff700
+      margin: 10px 20px 20px;
+    }
+
+    .categories {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .category {
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+      padding: 20px;
+      width: 300px;
+      height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    .category:hover {
+      transform: scale(1.05);
+    }
+
+    .category h2 {
+      color: #ffd700;
+      border-bottom: 2px dashed #ffd700;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    .task {
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #333;
+      color: #fff;
+      border-left: 5px solid #ffd700;
+      border-radius: 10px;
+      cursor: grab;
+      transition: background 0.3s;
+    }
+
+    .task:hover {
+      background-color: #444;
+    }
+
+    .add-task {
+      display: flex;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    .add-task input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 5px 0 0 5px;
+      border: 1px solid #ccc;
+    }
+
+    .add-task button {
+      padding: 8px 15px;
+      border: none;
+      background-color: #ffd700;
+      color: black;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .cartoon {
+      width: 100px;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Karish To-Do List </h1>
+  <div class="quote">"The secret of getting ahead is getting started." – Mark Twain</div>
+  <img src="https://media.tenor.com/Ws6Dm1ZW_vMAAAAi/peach-goma-peach-and-goma.gif" class="cartoon" alt="Motivation">
+
+  <div class="categories">
+    <div class="category" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>🎓 Study</h2>
+      <div class="task" draggable="true" ondragstart="drag(event)">Review Algorithms</div>
+      <div class="task" draggable="true" ondragstart="drag(event)">Read textbook chapter</div>
+      <div class="add-task">
+        <input type="text" placeholder="New task...">
+        <button onclick="addTask(this)">Add</button>
+      </div>
+    </div>
+    <div class="category" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>🏋️ Fitness</h2>
+      <div class="task" draggable="true" ondragstart="drag(event)">Morning Yoga</div>
+      <div class="task" draggable="true" ondragstart="drag(event)">Evening walk</div>
+      <div class="add-task">
+        <input type="text" placeholder="New task...">
+        <button onclick="addTask(this)">Add</button>
+      </div>
+    </div>
+    <div class="category" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>💼 Work</h2>
+      <div class="task" draggable="true" ondragstart="drag(event)">Finish report</div>
+      <div class="task" draggable="true" ondragstart="drag(event)">Send email to team</div>
+      <div class="add-task">
+        <input type="text" placeholder="New task...">
+        <button onclick="addTask(this)">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let draggedTask = null;
+
+    function drag(event) {
+      draggedTask = event.target;
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      if (draggedTask && event.target.classList.contains("category")) {
+        event.target.appendChild(draggedTask);
+        draggedTask = null;
+      } else if (draggedTask && event.target.classList.contains("task")) {
+        event.target.parentNode.insertBefore(draggedTask, event.target);
+        draggedTask = null;
+      }
+    }
+
+    function addTask(button) {
+      const input = button.previousElementSibling;
+      const taskText = input.value.trim();
+      if (taskText !== "") {
+        const task = document.createElement("div");
+        task.className = "task";
+        task.draggable = true;
+        task.ondragstart = drag;
+        task.textContent = taskText;
+        button.parentNode.parentNode.insertBefore(task, button.parentNode);
+        input.value = "";
+      }
+    }
+  </script>
+</body>
+</html>
